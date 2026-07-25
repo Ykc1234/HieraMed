@@ -127,7 +127,7 @@ class TRANS(nn.Module):
         out = self.alpha * self.graphmodel(graph_data.edge_index_dict, graph_data) + (1 - self.alpha) * seq_logits
         return out
 
-class TRANSLWL(nn.Module):
+class HieraMedWL(nn.Module):
     def __init__(
         self,
         Tokenizers,
@@ -142,7 +142,7 @@ class TRANSLWL(nn.Module):
         num_layers = 2,
         pe = False,
     ):
-        super(TRANSLWL, self).__init__()
+        super(HieraMedWL, self).__init__()
         self.embedding_dim = embedding_dim
         self.feat_tokenizers = Tokenizers
         self.embeddings = nn.ParameterDict()
@@ -293,7 +293,7 @@ class MyEmbedding(nn.Module):
         return emb
 
 
-class TRANSL(nn.Module):
+class HieraMed(nn.Module):
     def __init__(
             self,
             Tokenizers,
@@ -308,7 +308,7 @@ class TRANSL(nn.Module):
             num_layers=2,
             pe=False,
     ):
-        super(TRANSL, self).__init__()
+        super(HieraMed, self).__init__()
         self.embedding_dim = embedding_dim
         self.feat_tokenizers = Tokenizers
         self.embeddings = nn.ParameterDict()
@@ -438,7 +438,7 @@ class TRANSL(nn.Module):
 
 
 '''
-class TRANSL(nn.Module):
+class HieraMed(nn.Module):
     def __init__(
             self,
             Tokenizers,
@@ -453,7 +453,7 @@ class TRANSL(nn.Module):
             num_layers=2,
             pe=False,
     ):
-        super(TRANSL, self).__init__()
+        super(HieraMed, self).__init__()
         self.embedding_dim = embedding_dim
         self.feat_tokenizers = Tokenizers
         self.embeddings = nn.ParameterDict()
