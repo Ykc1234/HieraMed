@@ -16,7 +16,7 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 parser = argparse.ArgumentParser()
 parser.add_argument('--epochs', type=int, default=100, help = 'Number of epochs to train.')
 parser.add_argument('--lr', type=float, default = 0.001, help = 'learning rate.')
-parser.add_argument('--model', type=str, default="TRANSL", help = 'Transformer, RETAIN, StageNet, KAME, GCT, DDHGNN, TRANS')
+parser.add_argument('--model', type=str, default="HieraMed", help = 'Transformer, RETAIN, StageNet, KAME, GCT, DDHGNN, TRANS')
 parser.add_argument('--dev', type=int, default = 0)
 parser.add_argument('--seed', type=int, default = 42)
 parser.add_argument('--dataset', type=str, default = "mimic3", choices=['mimic3', 'mimic4', 'ccae'])
@@ -83,7 +83,7 @@ elif args.model == 'TRANS':
     model = TRANS(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
                     device, graph_meta=graph_meta, pe=args.pe_dim)
 
-elif args.model == 'TRANSL':
+elif args.model == 'HieraMed':
     data_path = './logs/{}_{}.pkl'.format(args.dataset, args.model)
     if os.path.exists(data_path):
         mdataset = load(data_path)
@@ -94,7 +94,7 @@ elif args.model == 'TRANSL':
     trainset, validset, testset = split_dataset(mdataset)
     print(len(trainset))
     train_loader , val_loader, test_loader = mm_dataloader(trainset, validset, testset, batch_size=args.batch_size)
-    model = TRANSL(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
+    model = HieraMed(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
                     device, graph_meta=graph_meta, pe=args.pe_dim)
     
 ckptpath = './logs/trained_{}_{}.ckpt'.format(args.model, args.dataset)
@@ -125,13 +125,13 @@ else:
         model = TRANS(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
                     device, graph_meta=graph_meta, pe=args.pe_dim)
     #for limited gpu memory
-    if args.model == 'TRANSL':
+    if args.model == 'HieraMed':
         del model
         torch.cuda.empty_cache()
         import gc
         gc.collect()
         device = torch.device('cpu')
-        model = TRANSL(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
+        model = HieraMed(Tokenizers, 128, len(task_dataset.get_all_tokens('conditions')),
                     device, graph_meta=graph_meta, pe=args.pe_dim)
 
     best_model = torch.load(ckptpath)
